@@ -473,7 +473,7 @@ table tbody tr:nth-child(even):hover td { background: #F5F6F8; }
 }
 .col-picker:hover { color: var(--text-primary); }
 
-/* ─── SIGNAL CARDS (Alpha Flow / Revenue) ─── */
+/* ─── SIGNAL CARDS (TAO Flow / Revenue) ─── */
 .signal-card {
   border-left: 4px solid var(--border-color); background: var(--bg-hover);
   padding: 14px 18px; margin-bottom: 20px; font-size: 13px; line-height: 1.6;
@@ -926,7 +926,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
   .table-col{display:flex;flex-direction:column;min-height:0;}
   .table-title{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
     color:var(--text-muted);padding-bottom:8px;border-bottom:1px solid var(--border-color);margin-bottom:0;}
-  .table-wrap{flex:1;overflow:visible;}
+  .table-wrap{flex:1;overflow-x:auto;overflow-y:visible;-webkit-overflow-scrolling:touch;}
   table{width:100%;border-collapse:collapse;}
   th{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);
     padding:10px 8px;border-bottom:1px solid var(--border-card);text-align:left;position:relative;cursor:pointer;user-select:none;}
@@ -1095,7 +1095,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
   .table-col{display:flex;flex-direction:column;min-height:0;}
   .table-title{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
     color:var(--text-muted);padding-bottom:8px;border-bottom:1px solid var(--border-color);margin-bottom:0;}
-  .table-wrap{flex:1;overflow:visible;}
+  .table-wrap{flex:1;overflow-x:auto;overflow-y:visible;-webkit-overflow-scrolling:touch;}
   table{width:100%;border-collapse:collapse;}
   th{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);
     padding:10px 8px;border-bottom:1px solid var(--border-card);text-align:left;position:relative;cursor:pointer;user-select:none;}
@@ -1266,7 +1266,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
   .table-col{display:flex;flex-direction:column;min-height:0;}
   .table-title{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
     color:var(--text-muted);padding-bottom:8px;border-bottom:1px solid var(--border-color);margin-bottom:0;}
-  .table-wrap{flex:1;overflow:visible;}
+  .table-wrap{flex:1;overflow-x:auto;overflow-y:visible;-webkit-overflow-scrolling:touch;}
   table{width:100%;border-collapse:collapse;}
   th{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);
     padding:10px 8px;border-bottom:1px solid var(--border-card);text-align:left;position:relative;cursor:pointer;user-select:none;}
@@ -1858,7 +1858,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
   .table-col{display:flex;flex-direction:column;min-height:0;}
   .table-title{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
     color:var(--text-muted);padding-bottom:8px;border-bottom:1px solid var(--border-color);margin-bottom:0;}
-  .table-wrap{flex:1;overflow:visible;}
+  .table-wrap{flex:1;overflow-x:auto;overflow-y:visible;-webkit-overflow-scrolling:touch;}
   table{width:100%;border-collapse:collapse;}
   th{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);
     padding:10px 8px;border-bottom:1px solid var(--border-card);text-align:left;position:relative;cursor:pointer;user-select:none;}
@@ -3135,6 +3135,82 @@ th.sortable.asc .sort-arrow, th.sortable.desc .sort-arrow { opacity: 1; color: v
   .scroll-hint { display: block; }
 }
 
+
+/* ═══ TABLE CUTOFF FIX ═══ */
+/* Grid children need min-width:0 to prevent overflow */
+.page-grid > * { min-width: 0; }
+.table-col { min-width: 0; overflow: hidden; }
+.table-wrap { min-width: 0; }
+
+/* Ensure table-wrap allows horizontal scroll when table is wider than container */
+.table-wrap {
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Table inside grid should respect container width */
+.page-grid table,
+.table-wrap table {
+  min-width: 500px; /* minimum readable width */
+}
+
+/* Scrollbar styling for table-wrap */
+.table-wrap::-webkit-scrollbar { height: 6px; }
+.table-wrap::-webkit-scrollbar-track { background: transparent; }
+.table-wrap::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 3px; }
+.table-wrap::-webkit-scrollbar-thumb:hover { background: #9CA3AF; }
+
+/* On wider screens, give table column more room */
+@media (min-width: 1400px) {
+  .page-grid { grid-template-columns: minmax(200px, 280px) 1fr !important; }
+}
+
+/* Dereg risk page — ensure the right-side table has enough room */
+#page-dereg-risk .page-grid {
+  grid-template-columns: minmax(200px, 260px) 1fr;
+}
+
+
+/* ═══ PAGE-GRID SPECIFICITY FIX ═══ */
+/* Each page needs its own grid-template-columns scoped by page ID */
+
+/* Emissions Flow: left=category breakdown (narrow), right=table (wide) */
+#page-emissions .page-grid {
+  grid-template-columns: minmax(240px, 340px) 1fr !important;
+}
+
+/* Dereg Risk: left=factors (narrow), right=table (wide) */
+#page-dereg-risk .page-grid {
+  grid-template-columns: minmax(200px, 280px) 1fr !important;
+}
+
+/* Validators: left=table (wide), right=sidebar panel */
+#page-validators .page-grid {
+  grid-template-columns: 1fr minmax(240px, 320px) !important;
+}
+
+/* Portfolio: left=main (wide), right=sidebar panel */
+#page-portfolio .page-grid {
+  grid-template-columns: 1fr minmax(240px, 320px) !important;
+}
+
+/* Val Due Diligence: left=table (wide), right=sidebar panel */
+#page-val-due-diligence .page-grid {
+  grid-template-columns: 1fr minmax(240px, 320px) !important;
+}
+
+/* Responsive: collapse all grids on narrow screens */
+@media (max-width: 960px) {
+  #page-emissions .page-grid,
+  #page-dereg-risk .page-grid,
+  #page-validators .page-grid,
+  #page-portfolio .page-grid,
+  #page-val-due-diligence .page-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -3159,28 +3235,20 @@ th.sortable.asc .sort-arrow, th.sortable.desc .sort-arrow { opacity: 1; color: v
 </div>
 <div class="sidebar-scroll">
     <div class="sidebar-section">
-      <div class="sidebar-label">Portfolio</div>
-      <a href="#" class="sidebar-link" data-page="portfolio">
-        <span class="icon">◉</span> Fund Performance
+      <div class="sidebar-label">Subnets</div>
+      <a href="#" class="sidebar-link active" data-page="subnet-eval">
+        <span class="icon">◆</span> Risk Assessment Index
       </a>
-      <a href="#" class="sidebar-link" data-page="risk-budget">
-        <span class="icon">▲</span> Risk Budget
-        <span class="sidebar-badge" style="background:var(--red);">LIVE</span>
+      <a href="#" class="sidebar-link" data-page="dereg-risk">
+        <span class="icon">▲</span> Deregistration Monitor
       </a>
-      <a href="#" class="sidebar-link" data-page="rebalance">
-        <span class="icon">◆</span> Rebalance Playbook
-        <span class="sidebar-badge" style="background:var(--amber);">3</span>
-      </a>
-      <a href="#" class="sidebar-link" data-page="liquidity">
-        <span class="icon">◈</span> Liquidity & Exit
+      <a href="#" class="sidebar-link" data-page="alpha-flow">
+        <span class="icon">◈</span> TAO Flow Monitor
       </a>
     </div>
 
     <div class="sidebar-section">
-      <div class="sidebar-label">Subnets</div>
-      <a href="#" class="sidebar-link active" data-page="subnet-eval">
-        <span class="icon">◆</span> Risk Evaluations
-      </a>
+      <div class="sidebar-label">Backlog</div>
       <a href="#" class="sidebar-link" data-page="health-scorecard">
         <span class="icon">◈</span> Health Scorecard
       </a>
@@ -3193,13 +3261,6 @@ th.sortable.asc .sort-arrow, th.sortable.desc .sort-arrow { opacity: 1; color: v
       <a href="#" class="sidebar-link" data-page="emissions-forecast">
         <span class="icon">◇</span> Emissions Forecast
         <span class="sidebar-badge" style="background:var(--blue);">NEW</span>
-      </a>
-    </div>
-
-    <div class="sidebar-section">
-      <div class="sidebar-label">Risk & Stress</div>
-      <a href="#" class="sidebar-link" data-page="dereg-risk">
-        <span class="icon">▲</span> Deregistration Monitor
       </a>
       <a href="#" class="sidebar-link" data-page="scenarios">
         <span class="icon">◆</span> Stress Test Lab
@@ -3214,10 +3275,20 @@ th.sortable.asc .sort-arrow, th.sortable.desc .sort-arrow { opacity: 1; color: v
       <a href="#" class="sidebar-link" data-page="alert-rules">
         <span class="icon">◆</span> Alert Rules
       </a>
-    </div>
-
-    <div class="sidebar-section">
-      <div class="sidebar-label">Validator Risk</div>
+      <a href="#" class="sidebar-link" data-page="portfolio">
+        <span class="icon">◉</span> Fund Performance
+      </a>
+      <a href="#" class="sidebar-link" data-page="risk-budget">
+        <span class="icon">▲</span> Risk Budget
+        <span class="sidebar-badge" style="background:var(--red);">LIVE</span>
+      </a>
+      <a href="#" class="sidebar-link" data-page="rebalance">
+        <span class="icon">◆</span> Rebalance Playbook
+        <span class="sidebar-badge" style="background:var(--amber);">3</span>
+      </a>
+      <a href="#" class="sidebar-link" data-page="liquidity">
+        <span class="icon">◈</span> Liquidity & Exit
+      </a>
       <a href="#" class="sidebar-link" data-page="validators">
         <span class="icon">●</span> Concentration Index
       </a>
@@ -3227,20 +3298,9 @@ th.sortable.asc .sort-arrow, th.sortable.desc .sort-arrow { opacity: 1; color: v
       <a href="#" class="sidebar-link" data-page="val-dependency">
         <span class="icon">◈</span> Dependency Map
       </a>
-    </div>
-
-    <div class="sidebar-section">
-      <div class="sidebar-label">Analytics</div>
-      <a href="#" class="sidebar-link" data-page="alpha-flow">
-        <span class="icon">◈</span> Alpha Flow
-      </a>
       <a href="#" class="sidebar-link" data-page="backtest">
         <span class="icon">◆</span> Backtest Results
       </a>
-    </div>
-
-    <div class="sidebar-section">
-      <div class="sidebar-label">Resources</div>
       <a href="#" class="sidebar-link" data-page="methodology">
         <span class="icon">◇</span> Methodology
       </a>
@@ -3267,7 +3327,7 @@ th.sortable.asc .sort-arrow, th.sortable.desc .sort-arrow { opacity: 1; color: v
 <!-- PAGE 1: HOME / OVERVIEW                    -->
 <!-- ═══════════════════════════════════════════ -->
 <div class="page active" id="page-subnet-eval">
-<div class="breadcrumb"><a onclick="navigateTo('dashboard');return false;" href="#">TAO</a> › Subnets › <span>Risk Evaluations</span></div>
+<div class="breadcrumb"><a onclick="navigateTo('dashboard');return false;" href="#">TAO</a> › Subnets › <span>Risk Assessment Index</span></div>
 
 
 <div class="page-header">
@@ -3278,8 +3338,8 @@ th.sortable.asc .sort-arrow, th.sortable.desc .sort-arrow { opacity: 1; color: v
 <div class="metrics-row">
 <div class="metric-card hero">
 <div class="metric-label">Total Subnets<span class="info-tip" tabindex="0" role="button" aria-label="More info">i<span class="tip-content">Number of subnets with completed Risk Assessment Index (RAI) assessments.</span></span></div>
-<div class="metric-value">28</div>
-<div class="metric-change up"><span class="metric-delta up">▲ +3 <span class="delta-period">30d</span></span></div>
+<div class="metric-value">32</div>
+<div class="metric-change up"><span class="metric-delta up">▲ +4 <span class="delta-period">30d</span></span></div>
 </div>
 <div class="page-toolbar">
 <div class="toolbar-title"></div>
@@ -3312,19 +3372,19 @@ th.sortable.asc .sort-arrow, th.sortable.desc .sort-arrow { opacity: 1; color: v
 </div>
 <div class="metric-card">
 <div class="metric-label">At-Risk (Grade D/F)<span class="info-tip" tabindex="0" role="button" aria-label="More info">i<span class="tip-content">Grade D/F = >60% deregistration probability within 90 days. Exit or hedge.</span></span></div>
-<div class="metric-value">6</div>
-<div class="metric-change down"><span class="metric-delta down">↑ +2 <span class="delta-period">30d — rising</span></span></div>
+<div class="metric-value">8</div>
+<div class="metric-change down"><span class="metric-delta down">↑ +3 <span class="delta-period">30d — rising</span></span></div>
 </div>
 <div class="metric-card">
 <div class="metric-label">Flags Active<span class="info-tip" tabindex="0" role="button" aria-label="More info">i<span class="tip-content">Number of binary risk flags triggered across all subnets.</span></span></div>
-<div class="metric-value">12</div>
-<div class="metric-change"><span class="period">across 8 subnets</span></div>
+<div class="metric-value">16</div>
+<div class="metric-change"><span class="period">across 11 subnets</span></div>
 </div>
 </div>
 <!-- DIMENSION BREAKDOWN (Financial Statement style from Token Terminal) -->
 <div class="card">
 <div class="card-header">
-<span class="card-title">Dimension Breakdown — Top 10 Scored</span>
+<span class="card-title">Dimension Breakdown — All 32 Rated Subnets</span>
 <div style="display:flex;align-items:center;gap:8px;">
 <span class="col-picker">⚙ Show/Hide Columns</span>
 <button class="export-btn">⬇ PNG</button>
@@ -3348,12 +3408,34 @@ th.sortable.asc .sort-arrow, th.sortable.desc .sort-arrow { opacity: 1; color: v
 <tr><td class="td-name">SN8 Vanta</td><td>34.0</td><td>21.5</td><td>17.5</td><td>12.0</td><td style="font-weight:700;color:var(--text-primary)">85</td><td><span class="grade grade-a">A</span></td></tr>
 <tr><td class="td-name">SN9 iota</td><td>33.6</td><td>20.0</td><td>16.4</td><td>12.0</td><td style="font-weight:700;color:var(--text-primary)">82</td><td><span class="grade grade-a">A</span></td></tr>
 <tr><td class="td-name">SN41 SportsTensor</td><td>33.2</td><td>20.5</td><td>16.0</td><td>11.3</td><td style="font-weight:700;color:var(--text-primary)">81</td><td><span class="grade grade-a">A</span></td></tr>
+<tr><td class="td-name">SN25 Bitcurrent</td><td>31.2</td><td>19.8</td><td>15.0</td><td>11.0</td><td style="font-weight:700;color:var(--text-primary)">77</td><td><span class="grade grade-b">B</span></td></tr>
+<tr><td class="td-name">SN5 Kaizen</td><td>30.4</td><td>19.5</td><td>14.6</td><td>11.0</td><td style="font-weight:700;color:var(--text-primary)">76</td><td><span class="grade grade-b">B</span></td></tr>
 <tr><td class="td-name">SN120 Affine</td><td>29.6</td><td>19.0</td><td>14.4</td><td>11.0</td><td style="font-weight:700;color:var(--text-primary)">74</td><td><span class="grade grade-b">B</span></td></tr>
+<tr><td class="td-name">SN18 Cortex.t</td><td>29.2</td><td>18.8</td><td>14.0</td><td>10.5</td><td style="font-weight:700;color:var(--text-primary)">73</td><td><span class="grade grade-b">B</span></td></tr>
 <tr><td class="td-name">SN3 Ridges</td><td>28.8</td><td>18.5</td><td>14.2</td><td>10.5</td><td style="font-weight:700;color:var(--text-primary)">72</td><td><span class="grade grade-b">B</span></td></tr>
+<tr><td class="td-name">SN64 Chutes</td><td>28.0</td><td>18.0</td><td>13.8</td><td>10.2</td><td style="font-weight:700;color:var(--text-primary)">70</td><td><span class="grade grade-b">B</span></td></tr>
+<tr><td class="td-name">SN21 Omega</td><td>28.4</td><td>18.2</td><td>13.4</td><td>10.0</td><td style="font-weight:700;color:var(--text-primary)">70</td><td><span class="grade grade-b">B</span></td></tr>
 <tr><td class="td-name">SN11 HashiChain</td><td>27.6</td><td>17.0</td><td>14.0</td><td>10.4</td><td style="font-weight:700;color:var(--text-primary)">69</td><td><span class="grade grade-c">C</span></td></tr>
+<tr><td class="td-name">SN32 Datura</td><td>27.2</td><td>17.5</td><td>13.3</td><td>10.0</td><td style="font-weight:700;color:var(--text-primary)">68</td><td><span class="grade grade-c">C</span></td></tr>
 <tr><td class="td-name">SN4 Templar</td><td>26.8</td><td>17.5</td><td>12.7</td><td>10.0</td><td style="font-weight:700;color:var(--text-primary)">67</td><td><span class="grade grade-c">C</span></td></tr>
+<tr><td class="td-name">SN56 Gradients</td><td>26.0</td><td>16.5</td><td>13.0</td><td>9.5</td><td style="font-weight:700;color:var(--text-primary)">65</td><td><span class="grade grade-c">C</span></td></tr>
+<tr><td class="td-name">SN14 Palaidn</td><td>25.6</td><td>16.0</td><td>12.4</td><td>9.5</td><td style="font-weight:700;color:var(--text-primary)">64</td><td><span class="grade grade-c">C</span></td></tr>
+<tr><td class="td-name">SN48 Nextplace</td><td>25.2</td><td>15.5</td><td>12.8</td><td>9.0</td><td style="font-weight:700;color:var(--text-primary)">63</td><td><span class="grade grade-c">C</span></td></tr>
 <tr><td class="td-name">SN19 Vidaio</td><td>24.4</td><td>15.0</td><td>12.1</td><td>9.5</td><td style="font-weight:700;color:var(--text-primary)">61</td><td><span class="grade grade-c">C</span></td></tr>
+<tr><td class="td-name">SN7 Subvortex</td><td>24.0</td><td>15.5</td><td>11.5</td><td>9.0</td><td style="font-weight:700;color:var(--text-primary)">60</td><td><span class="grade grade-c">C</span></td></tr>
 <tr><td class="td-name">SN13 NOVA</td><td>21.2</td><td>13.5</td><td>10.3</td><td>8.0</td><td style="font-weight:700;color:var(--text-primary)">53</td><td><span class="grade grade-d">D</span></td></tr>
+<tr><td class="td-name">SN2 Omron</td><td>20.8</td><td>13.0</td><td>10.7</td><td>7.5</td><td style="font-weight:700;color:var(--text-primary)">52</td><td><span class="grade grade-d">D</span></td></tr>
+<tr><td class="td-name">SN67 NeuralNet</td><td>20.0</td><td>12.5</td><td>10.0</td><td>8.0</td><td style="font-weight:700;color:var(--text-primary)">51</td><td><span class="grade grade-d">D</span></td></tr>
+<tr><td class="td-name">SN47 Manifold</td><td>19.6</td><td>12.0</td><td>10.4</td><td>7.0</td><td style="font-weight:700;color:var(--text-primary)">49</td><td><span class="grade grade-d">D</span></td></tr>
+<tr><td class="td-name">SN33 Aether</td><td>18.8</td><td>12.5</td><td>9.7</td><td>7.0</td><td style="font-weight:700;color:var(--text-primary)">48</td><td><span class="grade grade-d">D</span></td></tr>
+<tr><td class="td-name">SN51 CortexAI</td><td>18.4</td><td>11.5</td><td>10.1</td><td>7.0</td><td style="font-weight:700;color:var(--text-primary)">47</td><td><span class="grade grade-d">D</span></td></tr>
+<tr><td class="td-name">SN88 Bitsec</td><td>18.0</td><td>11.0</td><td>9.5</td><td>6.5</td><td style="font-weight:700;color:var(--text-primary)">45</td><td><span class="grade grade-d">D</span></td></tr>
+<tr><td class="td-name">SN22 DeStor</td><td>17.6</td><td>11.5</td><td>9.4</td><td>6.5</td><td style="font-weight:700;color:var(--text-primary)">45</td><td><span class="grade grade-d">D</span></td></tr>
+<tr><td class="td-name">SN71 NuLink</td><td>16.0</td><td>10.0</td><td>8.5</td><td>6.5</td><td style="font-weight:700;color:var(--text-primary)">41</td><td><span class="grade grade-f">F</span></td></tr>
+<tr><td class="td-name">SN99 Photon</td><td>15.2</td><td>9.5</td><td>8.0</td><td>5.8</td><td style="font-weight:700;color:var(--text-primary)">39</td><td><span class="grade grade-f">F</span></td></tr>
+<tr><td class="td-name">SN44 SynapseX</td><td>14.0</td><td>9.0</td><td>7.5</td><td>5.5</td><td style="font-weight:700;color:var(--text-primary)">36</td><td><span class="grade grade-f">F</span></td></tr>
+<tr><td class="td-name">SN77 Axiom</td><td>12.8</td><td>8.5</td><td>6.2</td><td>5.0</td><td style="font-weight:700;color:var(--text-primary)">33</td><td><span class="grade grade-f">F</span></td></tr>
+<tr><td class="td-name">SN102 VoidNet</td><td>10.4</td><td>7.0</td><td>5.6</td><td>4.0</td><td style="font-weight:700;color:var(--text-primary)">27</td><td><span class="grade grade-f">F</span></td></tr>
 </tbody>
 </table>
 </div>
@@ -4337,7 +4419,7 @@ th.sortable.asc .sort-arrow, th.sortable.desc .sort-arrow { opacity: 1; color: v
 <h1>Methodology</h1>
 <p>Scoring framework, tool definitions, and data sources</p>
 </div>
-<div style="background:var(--bg-hover);border-radius:6px;padding:16px;margin-bottom:24px;"><div style="font-size:11px;font-weight:700;color:var(--text-secondary);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;">Jump To</div><div style="display:flex;gap:8px;flex-wrap:wrap;"><a href="#score" style="padding:6px 12px;background:var(--bg-primary);border:1px solid var(--border-color);border-radius:4px;font-size:12px;color:var(--text-secondary);text-decoration:none;">Subnet Risk</a><a href="#dereg" style="padding:6px 12px;background:var(--bg-primary);border:1px solid var(--border-color);border-radius:4px;font-size:12px;color:var(--text-secondary);text-decoration:none;">Deregistration</a><a href="#momentum" style="padding:6px 12px;background:var(--bg-primary);border:1px solid var(--border-color);border-radius:4px;font-size:12px;color:var(--text-secondary);text-decoration:none;">Momentum</a><a href="#validator" style="padding:6px 12px;background:var(--bg-primary);border:1px solid var(--border-color);border-radius:4px;font-size:12px;color:var(--text-secondary);text-decoration:none;">Validators</a><a href="#alpha" style="padding:6px 12px;background:var(--bg-primary);border:1px solid var(--border-color);border-radius:4px;font-size:12px;color:var(--text-secondary);text-decoration:none;">Alpha Flow</a><a href="#revenue" style="padding:6px 12px;background:var(--bg-primary);border:1px solid var(--border-color);border-radius:4px;font-size:12px;color:var(--text-secondary);text-decoration:none;">Revenue</a></div></div>
+<div style="background:var(--bg-hover);border-radius:6px;padding:16px;margin-bottom:24px;"><div style="font-size:11px;font-weight:700;color:var(--text-secondary);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;">Jump To</div><div style="display:flex;gap:8px;flex-wrap:wrap;"><a href="#score" style="padding:6px 12px;background:var(--bg-primary);border:1px solid var(--border-color);border-radius:4px;font-size:12px;color:var(--text-secondary);text-decoration:none;">Subnet Risk</a><a href="#dereg" style="padding:6px 12px;background:var(--bg-primary);border:1px solid var(--border-color);border-radius:4px;font-size:12px;color:var(--text-secondary);text-decoration:none;">Deregistration</a><a href="#momentum" style="padding:6px 12px;background:var(--bg-primary);border:1px solid var(--border-color);border-radius:4px;font-size:12px;color:var(--text-secondary);text-decoration:none;">Momentum</a><a href="#validator" style="padding:6px 12px;background:var(--bg-primary);border:1px solid var(--border-color);border-radius:4px;font-size:12px;color:var(--text-secondary);text-decoration:none;">Validators</a><a href="#alpha" style="padding:6px 12px;background:var(--bg-primary);border:1px solid var(--border-color);border-radius:4px;font-size:12px;color:var(--text-secondary);text-decoration:none;">TAO Flow</a><a href="#revenue" style="padding:6px 12px;background:var(--bg-primary);border:1px solid var(--border-color);border-radius:4px;font-size:12px;color:var(--text-secondary);text-decoration:none;">Revenue</a></div></div>
 <div class="page-toolbar">
 <div class="toolbar-title"></div>
 <button class="theme-toggle" onclick="document.body.classList.toggle('dark'); this.textContent = document.body.classList.contains('dark') ? '☀' : '☾'" title="Toggle dark mode (D)" style="margin-right:4px">☾</button>
@@ -4463,9 +4545,9 @@ th.sortable.asc .sort-arrow, th.sortable.desc .sort-arrow { opacity: 1; color: v
 </table>
 </div>
 </div>
-<!-- SECTION 5: Alpha Flow — merged paragraphs per conciseness fix #8 -->
+<!-- SECTION 5: TAO Flow — merged paragraphs per conciseness fix #8 -->
 <div class="card" style="margin-top:20px;">
-<div class="card-header"><span class="card-title">Alpha Flow Monitor</span></div>
+<div class="card-header"><span class="card-title">TAO Flow Monitor</span></div>
 <div style="padding:4px 0;">
 <p class="method-intro">
         Tracks TAO flowing into and out of subnet alpha pools over 24–72h windows. When multiple large wallets (500τ+) converge on the same subnet within a short timeframe, it's a "smart money" signal. Data from on-chain pool transactions, labelled wallets (OTF, dao5, Yuma, known funds), and pool depth snapshots at 15-minute intervals.
@@ -4518,7 +4600,7 @@ th.sortable.asc .sort-arrow, th.sortable.desc .sort-arrow { opacity: 1; color: v
 <div class="method-section-label" style="color:var(--amber);margin-top:0;">WHAT TO DISTRUST</div>
 <div class="limitation-item"><strong>Deregistration Index:</strong> Directional only — 2 observed removals limits precision. Don't use alone for low-conviction calls.</div>
 <div class="limitation-item"><strong>Revenue data:</strong> 120 subnets self-report or report nothing. Treat non-verified revenue as estimates.</div>
-<div class="limitation-item"><strong>Alpha Flow labels:</strong> Wallet labelling is probabilistic. "OTF Wallet" = high confidence; unlabelled addresses = moderate.</div>
+<div class="limitation-item"><strong>TAO Flow labels:</strong> Wallet labelling is probabilistic. "OTF Wallet" = high confidence; unlabelled addresses = moderate.</div>
 <div class="limitation-item"><strong>Historical depth:</strong> Time-series start June 2025. Pre-dTAO data unavailable.</div>
 <div class="limitation-item"><strong>Pruning rank:</strong> EMA parameters undocumented by OTF. Our model reverse-engineers from observed outcomes.</div>
 </div>
@@ -4530,11 +4612,11 @@ th.sortable.asc .sort-arrow, th.sortable.desc .sort-arrow { opacity: 1; color: v
 <!-- PAGE 7: ALPHA FLOW MONITOR                -->
 <!-- ═══════════════════════════════════════════ -->
 <div class="page" id="page-alpha-flow">
-<div class="breadcrumb"><a onclick="navigateTo('dashboard');return false;" href="#">TAO</a> › Analytics › <span>Alpha Flow</span></div>
+<div class="breadcrumb"><a onclick="navigateTo('dashboard');return false;" href="#">TAO</a> › Subnets › <span>TAO Flow Monitor</span></div>
 
 
 <div class="page-header">
-<h1>Alpha Flow Monitor</h1>
+<h1>TAO Flow Monitor</h1>
 <p>24-72 hour alpha rotation predictor — where smart money moves before subnet price action</p>
 </div>
 <!-- Key signal — lead with the finding per audit -->
