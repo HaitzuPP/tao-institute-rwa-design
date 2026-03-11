@@ -229,7 +229,9 @@ body {
 .sidebar-link .icon {
   width: 18px; height: 18px; display: flex; align-items: center;
   justify-content: center; font-size: 14px; opacity: 0.6; flex-shrink: 0;
+  transition: opacity 0.2s ease, color 0.2s ease;
 }
+.sidebar-link:hover .icon { opacity: 0.85; }
 .sidebar-link.active .icon { opacity: 1; }
 .sidebar-link-text { display: none; }
 
@@ -434,7 +436,8 @@ table td {
   border-bottom: 1px solid #F3F4F6;
   color: var(--text-secondary);
 }
-table tr:hover td { background: #F5F5F5; transition: background 0.1s; }
+table td { transition: background 0.15s ease; }
+table tr:hover td { background: #F5F5F5; }
 table tbody tr:nth-child(even) td { background: #FAFBFC; }
 table tbody tr:nth-child(even):hover td { background: #F5F6F8; }
 .td-name { color: var(--text-primary); font-weight: 600; cursor: pointer; }
@@ -546,6 +549,8 @@ table tbody tr:nth-child(even):hover td { background: #F5F6F8; }
   transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
 }
 .export-btn:hover { background: var(--bg-hover); color: var(--text-primary); box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.export-btn:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+.export-btn:active { transform: translateY(1px); box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
 
 /* ─── COLUMN PICKER (from DefiLlama) ─── */
 .col-picker {
@@ -768,7 +773,11 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
   background: var(--bg-primary); border: 1px solid var(--border-color);
   font-size: 18px; cursor: pointer; color: var(--text-primary);
   align-items: center; justify-content: center;
+  transition: all 0.2s ease;
 }
+.mobile-menu-btn:hover { background: var(--bg-hover); color: var(--green); border-color: var(--green); }
+.mobile-menu-btn:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+.mobile-menu-btn:active { transform: scale(0.95); }
 
 @media (max-width: 900px) {
   .sidebar { display: none; }
@@ -895,7 +904,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
   th{text-align:left;color:var(--text-muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;
     padding:8px 12px;border-bottom:1px solid var(--border-color);font-weight:600;}
   td{padding:8px 12px;border-bottom:1px solid var(--border-color);color:var(--text-secondary);}
-  .toggle{width:32px;height:18px;border-radius:9px;position:relative;cursor:pointer;display:inline-block;}
+  .toggle{width:32px;height:18px;border-radius:9px;position:relative;cursor:pointer;display:inline-block;transition:background 0.3s ease;}
   .toggle.on{background:var(--green);}
   .toggle.off{background:var(--text-muted);}
   .toggle::after{content:'';position:absolute;width:14px;height:14px;border-radius:50%;background:white;
@@ -2417,6 +2426,8 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
             background-color: var(--text-muted);
             color: var(--text-primary);
         }
+        .btn-primary:focus-visible { outline: 3px solid var(--green); outline-offset: 2px; }
+        .btn-primary:active { transform: translateY(1px); box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); }
 
         .btn-secondary {
             padding: 1rem 2rem;
@@ -2436,6 +2447,8 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
         .btn-secondary:hover {
             color: var(--text-secondary);
         }
+        .btn-secondary:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+        .btn-secondary:active { color: var(--text-primary); transform: translateY(1px); }
 
         /* ===== NETWORK STATS ===== */
         .network-stats {
@@ -2761,8 +2774,10 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .alert-timestamp { font-size:10px; color:var(--text-muted); white-space:nowrap; }
 .alert-body { flex:1; font-size:12px; color:var(--text-secondary); line-height:1.5; }
 .alert-body strong { color:var(--text-primary); }
-.ack-btn { background:none; border:1px solid var(--border-color); border-radius:4px; padding:3px 8px; font-size:10px; font-weight:600; color:var(--text-muted); cursor:pointer; margin-top:4px; }
+.ack-btn { background:none; border:1px solid var(--border-color); border-radius:4px; padding:3px 8px; font-size:10px; font-weight:600; color:var(--text-muted); cursor:pointer; margin-top:4px; transition:all 0.2s ease; }
 .ack-btn:hover { background:var(--bg-hover); color:var(--text-primary); }
+.ack-btn:focus-visible { outline:2px solid var(--green); outline-offset:1px; }
+.ack-btn:active { background:var(--bg-active); color:var(--green); transform:translateY(1px); }
 
 /* ── Escalation Policy ── */
 .esc-tier { display:flex; align-items:center; gap:10px; padding:10px 14px; border:1px solid var(--border-color); border-radius:4px; margin-bottom:6px; }
@@ -3498,10 +3513,88 @@ th.sorted { color: var(--green); font-weight: 700; }
   width: 100%; display: flex; align-items: center; gap: 8px; 
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.sidebar.expanded .sidebar-subtitle { 
-  font-size: 9px; white-space: nowrap; overflow: hidden; 
+.sidebar.expanded .sidebar-subtitle {
+  font-size: 9px; white-space: nowrap; overflow: hidden;
   text-overflow: ellipsis; max-width: 100%; text-align: left;
   margin-top: 4px; padding: 0 4px;
+}
+
+/* ═══ VISUAL POLISH (UX Audit Round 2) ═══ */
+
+/* Elevation system */
+:root {
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 2px 6px rgba(0,0,0,0.08);
+  --shadow-lg: 0 4px 12px rgba(0,0,0,0.1);
+  --shadow-xl: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+/* Focus-visible for all interactive elements */
+.filter-pill:focus-visible, .filter-btn:focus-visible, .time-range-btn:focus-visible,
+.col-picker:focus-visible, .scenario:focus-visible, .scenario-card:focus-visible,
+.learn-card:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; border-radius: 4px; }
+
+/* Active state for buttons */
+.filter-pill:active, .filter-btn:active, .time-range-btn:active,
+.export-btn:active, .ack-btn:active { transform: translateY(1px); }
+
+/* Transition for interactive elements */
+.filter-pill, .filter-btn, .time-range-btn { transition: all 0.2s ease; }
+.scenario, .scenario-card { transition: all 0.2s ease; }
+.scenario:active, .scenario-card:active { transform: scale(0.98); }
+.learn-card { transition: all 0.2s ease; }
+.learn-card:hover { border-color: var(--green); box-shadow: 0 2px 8px rgba(22,163,74,0.1); }
+.learn-card:active { transform: translateY(1px); }
+
+/* Clickable row keyboard support */
+tr[role="link"] { transition: background 0.15s ease; cursor: pointer; }
+tr[role="link"]:focus-visible { outline: 2px solid var(--green); outline-offset: -1px; }
+tr[role="link"]:active { background: var(--bg-active); }
+
+/* Info/hover tip keyboard access */
+.hover-tip:focus-visible, .info-tip:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; border-radius: 50%; }
+.hover-tip:focus-visible .tip-content, .info-tip:focus-visible .tip-content { display: block; }
+
+/* Search input focus */
+.search-input, .search-box input, .top-nav-search input { transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+.search-input:focus, .search-box input:focus, .top-nav-search input:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(22,163,74,0.1); }
+
+/* Collapsed sidebar icon hover */
+.sidebar:not(.expanded) .sidebar-link:hover { background: var(--bg-hover); border-radius: 6px; }
+.sidebar:not(.expanded) .sidebar-link:hover .icon { color: var(--green); opacity: 1; }
+
+/* Sortable header focus consistency */
+th.sortable:focus-visible, th[onclick]:focus-visible { outline: 2px solid var(--green); outline-offset: -1px; border-radius: 2px; }
+
+/* Empty state pattern */
+.empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px 20px; text-align: center; color: var(--text-muted); }
+.empty-state-icon { font-size: 36px; margin-bottom: 12px; opacity: 0.4; }
+.empty-state-title { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
+.empty-state-msg { font-size: 12px; color: var(--text-muted); max-width: 320px; line-height: 1.5; }
+
+/* Metric card subtle shadow for consistency */
+.metric-card { box-shadow: var(--shadow-sm); transition: box-shadow 0.2s ease; }
+.metric-card:hover { box-shadow: var(--shadow-md); }
+
+/* Card hover elevation */
+.card { transition: box-shadow 0.2s ease; }
+.card:hover { box-shadow: var(--shadow-md); }
+
+/* Cursor consistency */
+[role="button"], [role="link"], [role="switch"] { cursor: pointer; }
+.info-tip, .hover-tip { cursor: help; }
+
+/* Dark mode elevation adjustments */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+    --shadow-md: 0 2px 6px rgba(0,0,0,0.3);
+    --shadow-lg: 0 4px 12px rgba(0,0,0,0.4);
+    --shadow-xl: 0 8px 24px rgba(0,0,0,0.5);
+  }
+  table tr:hover td { background: var(--bg-hover); }
+  table tbody tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  table tbody tr:nth-child(even):hover td { background: var(--bg-hover); }
 }
 </style>
 </head>
@@ -3626,8 +3719,8 @@ th.sorted { color: var(--green); font-weight: 700; }
 <p style="font-size:13px;color:var(--red);font-weight:600;margin-bottom:8px;">⚠ 14 subnets at deregistration risk</p>
 <p class="hero-subtitle">Deregistration: 14 at risk · Validators: 47% top-3 concentration · Emissions: −10.5% WoW</p>
 <div class="hero-ctas">
-<a class="btn-primary" href="deregistration-risk-monitor.html">DEREGISTRATION RISK</a>
-<a class="btn-secondary" href="emissions-flow-map.html">EMISSIONS FLOW</a>
+<a class="btn-primary" href="#" onclick="navigateTo('dereg-risk');return false;">DEREGISTRATION RISK</a>
+<a class="btn-secondary" href="#" onclick="navigateTo('emissions');return false;">EMISSIONS FLOW</a>
 </div>
 </section>
  NETWORK STATS — Data first 
@@ -3635,7 +3728,7 @@ th.sorted { color: var(--green); font-weight: 700; }
 <div class="stat-card">
 <div class="stat-label">ACTIVE SUBNETS</div>
 <div class="stat-value">128</div>
-<div class="stat-tip"><b>Active Subnets</b>Updated daily. Each competes for a fixed emissions pie. <a href="subnet-revenue-tracker.html" style="color:var(--text-muted);text-decoration:underline;">View all →</a></div>
+<div class="stat-tip"><b>Active Subnets</b>Updated daily. Each competes for a fixed emissions pie. <a href="#" onclick="navigateTo('revenue');return false;" style="color:var(--text-muted);text-decoration:underline;">View all →</a></div>
 </div>
 <div class="stat-card">
 <div class="stat-label">VALIDATOR CONCENTRATION</div>
@@ -3671,31 +3764,31 @@ th.sorted { color: var(--green); font-weight: 700; }
 </tr>
 </thead>
 <tbody>
-<tr onclick="window.location='deregistration-risk-monitor.html';" onkeydown="if(event.key==='Enter')window.location='deregistration-risk-monitor.html';" role="link" tabindex="0">
+<tr onclick="navigateTo('dereg-risk');return false;" onkeydown="if(event.key==='Enter'){navigateTo('dereg-risk');}" role="link" tabindex="0">
 <td class="subnet-name">SN67 DataMesh</td>
 <td style="color:var(--red);font-weight:700;">94</td>
 <td><span class="subnet-grade" style="background:var(--red);color:var(--text-primary);">IMMINENT</span></td>
 <td style="font-size:11px;color:var(--red);font-weight:700;">EXIT NOW</td>
 </tr>
-<tr onclick="window.location='deregistration-risk-monitor.html';" onkeydown="if(event.key==='Enter')window.location='deregistration-risk-monitor.html';" role="link" tabindex="0">
+<tr onclick="navigateTo('dereg-risk');return false;" onkeydown="if(event.key==='Enter'){navigateTo('dereg-risk');}" role="link" tabindex="0">
 <td class="subnet-name">SN103 NeuroLang</td>
 <td style="color:var(--red);font-weight:700;">88</td>
 <td><span class="subnet-grade" style="background:var(--red);color:var(--text-primary);">IMMINENT</span></td>
 <td style="font-size:11px;color:var(--red);font-weight:700;">EXIT NOW</td>
 </tr>
-<tr onclick="window.location='deregistration-risk-monitor.html';" onkeydown="if(event.key==='Enter')window.location='deregistration-risk-monitor.html';" role="link" tabindex="0">
+<tr onclick="navigateTo('dereg-risk');return false;" onkeydown="if(event.key==='Enter'){navigateTo('dereg-risk');}" role="link" tabindex="0">
 <td class="subnet-name">SN88 ChainOracle</td>
 <td style="color:var(--amber);font-weight:700;">82</td>
 <td><span class="subnet-grade" style="background:var(--amber-dim);color:var(--amber);border:1px solid var(--amber);">CRITICAL</span></td>
 <td style="font-size:11px;color:var(--amber);font-weight:700;">REDUCE EXPOSURE</td>
 </tr>
-<tr onclick="window.location='deregistration-risk-monitor.html';" onkeydown="if(event.key==='Enter')window.location='deregistration-risk-monitor.html';" role="link" tabindex="0">
+<tr onclick="navigateTo('dereg-risk');return false;" onkeydown="if(event.key==='Enter'){navigateTo('dereg-risk');}" role="link" tabindex="0">
 <td class="subnet-name">SN112 SignalNet</td>
 <td style="color:var(--amber);font-weight:700;">78</td>
 <td><span class="subnet-grade" style="background:var(--amber-dim);color:var(--amber);border:1px solid var(--amber);">CRITICAL</span></td>
 <td style="font-size:11px;color:var(--amber);font-weight:700;">SET STOP-LOSS</td>
 </tr>
-<tr onclick="window.location='emissions-flow-map.html';" onkeydown="if(event.key==='Enter')window.location='emissions-flow-map.html';" role="link" tabindex="0">
+<tr onclick="navigateTo('emissions');return false;" onkeydown="if(event.key==='Enter'){navigateTo('emissions');}" role="link" tabindex="0">
 <td class="subnet-name">SN62 Ridges</td>
 <td style="color:var(--amber);font-weight:700;">−10.5% WoW</td>
 <td><span class="subnet-grade" style="background:var(--amber-dim);color:var(--amber);border:1px solid var(--amber);">DECLINING</span></td>
@@ -3703,16 +3796,16 @@ th.sorted { color: var(--green); font-weight: 700; }
 </tr>
 </tbody>
 </table>
-<div style="font-size:11px;color:var(--text-muted);padding-top:0.5rem;"><span style="color:var(--red);">●</span> EXIT = immediate action · <span style="color:var(--amber);">●</span> REDUCE/STOP-LOSS = act within 7d · Showing 5 of 7 · <a href="deregistration-risk-monitor.html" style="color:var(--text-muted);text-decoration:underline;">Full list →</a></div>
+<div style="font-size:11px;color:var(--text-muted);padding-top:0.5rem;"><span style="color:var(--red);">●</span> EXIT = immediate action · <span style="color:var(--amber);">●</span> REDUCE/STOP-LOSS = act within 7d · Showing 5 of 7 · <a href="#" onclick="navigateTo('dereg-risk');return false;" style="color:var(--text-muted);text-decoration:underline;">Full list →</a></div>
 </section>
  Methodology one-liner (replaces value props section) 
 <section style="padding:1.5rem 2rem;border-top:1px solid var(--border-color);font-size:11px;color:var(--text-muted);text-align:center;letter-spacing:0.5px;">
-        Scored daily on 5 factors (<a href="deregistration-risk-monitor.html#methodology" style="color:var(--text-muted);text-decoration:underline;text-underline-offset:2px;">see methodology</a>) · 128 subnets · No positions · No conflicts
+        Scored daily on 5 factors (<a href="#" onclick="navigateTo('methodology');return false;" style="color:var(--text-muted);text-decoration:underline;text-underline-offset:2px;">see methodology</a>) · 128 subnets · No positions · No conflicts
     </section>
  FOOTER 
 <footer>
 <div class="footer-left" style="font-weight:600;color:var(--text-muted);"><span style="color:var(--green);margin-right:4px;">●</span>Updated Mar 9, 2026 · Daily 00:00 UTC</div>
-<div class="footer-right">Sources: taorevenue.com · taostats.io · CoinGecko · <a href="deregistration-risk-monitor.html#methodology" style="color:var(--text-muted);text-decoration:underline;text-underline-offset:2px;">Methodology</a></div>
+<div class="footer-right">Sources: taorevenue.com · taostats.io · CoinGecko · <a href="#" onclick="navigateTo('methodology');return false;" style="color:var(--text-muted);text-decoration:underline;text-underline-offset:2px;">Methodology</a></div>
 </footer>
 <script>
         // Currency Toggle with localStorage persistence
@@ -5284,7 +5377,7 @@ th.sorted { color: var(--green); font-weight: 700; }
 <!-- PAGE 8: SUBNET REVENUE TRACKER            -->
 <!-- ═══════════════════════════════════════════ -->
 <div class="page" id="page-revenue">
-<div class="breadcrumb"><a style="text-decoration:underline;text-decoration-style:dotted;text-underline-offset:3px;" onclick="navigateTo('dashboard');return false;" href="#">Dashboard</a> › <span>Subnet Revenue Tracker</span></div>
+<div class="breadcrumb"><a style="text-decoration:underline;text-decoration-style:dotted;text-underline-offset:3px;" onclick="navigateTo('home');return false;" href="#">Dashboard</a> › <span>Subnet Revenue Tracker</span></div>
 
 <div class="page-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;">
 <div>
@@ -16708,7 +16801,14 @@ document.querySelectorAll('th.sortable').forEach(th => {
       }
       return dir === 'asc' ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
     });
-    rows.forEach(r => tbody.appendChild(r));
+    rows.forEach((r, i) => {
+      tbody.appendChild(r);
+      // Re-index row numbers (first cell if it's a numeric index)
+      var firstCell = r.querySelector('td:first-child');
+      if (firstCell && /^\d+$/.test(firstCell.textContent.trim())) {
+        firstCell.textContent = String(i + 1).padStart(firstCell.textContent.trim().length > 1 ? 2 : 1, '0');
+      }
+    });
   });
 });
 
@@ -17039,7 +17139,9 @@ function updateFilterCounts(){
 var revSortDir = {};
 function sortRevTable(col) {
     var table = document.getElementById('rev-table');
+    if (!table) return;
     var tbody = table.querySelector('tbody');
+    if (!tbody) return;
     var rows = Array.from(tbody.querySelectorAll('tr'));
     var key = 'data-' + col.replace('_','');
     revSortDir[col] = !(revSortDir[col] || false);
@@ -17222,12 +17324,20 @@ document.querySelectorAll('.alert-dispatch .filter-pill').forEach(function(pill)
     this.parentElement.querySelectorAll('.filter-pill').forEach(function(p) { p.classList.remove('active'); });
     this.classList.add('active');
     var filter = this.textContent.trim().toLowerCase();
-    var items = this.closest('.card').querySelectorAll('.alert-feed-item');
+    var card = this.closest('.card');
+    var items = card.querySelectorAll('.alert-feed-item');
+    var visible = 0;
     items.forEach(function(item) {
-      if (filter === 'all') { item.style.display = ''; }
-      else if (filter === 'critical') { item.style.display = item.classList.contains('sev-critical') ? '' : 'none'; }
-      else if (filter === 'warning') { item.style.display = item.classList.contains('sev-warning') ? '' : 'none'; }
+      var show = false;
+      if (filter === 'all') show = true;
+      else if (filter === 'critical') show = item.classList.contains('sev-critical');
+      else if (filter === 'warning') show = item.classList.contains('sev-warning');
+      item.style.display = show ? '' : 'none';
+      if (show) visible++;
     });
+    // Update count in header
+    var title = card.querySelector('.card-title');
+    if (title) title.textContent = 'Live Incidents (' + visible + ')';
   });
 });
 
@@ -17256,7 +17366,8 @@ document.querySelectorAll('.alert-dispatch .filter-pill').forEach(function(pill)
 
 // ── Toggle Switch Persistence ──
 document.querySelectorAll('.toggle').forEach(function(toggle) {
-  var key = 'toggle-' + (toggle.closest('tr') ? toggle.closest('tr').querySelector('td:first-child').textContent.trim() : toggle.id || Math.random());
+  var tr = toggle.closest('tr'); var td = tr ? tr.querySelector('td:first-child') : null;
+  var key = 'toggle-' + (td ? td.textContent.trim() : toggle.id || Math.random());
   var saved = localStorage.getItem(key);
   if (saved === 'off') { toggle.classList.remove('on'); toggle.classList.add('off'); toggle.textContent = 'OFF'; }
   toggle.addEventListener('click', function() {
@@ -17284,6 +17395,39 @@ document.querySelectorAll('th.sortable').forEach(function(th) {
   th.setAttribute('role', 'button');
   th.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.click(); } });
 });
+
+// ── Empty State for Filtered Tables ──
+function checkEmptyState(tableOrContainer) {
+  if (!tableOrContainer) return;
+  var tbody = tableOrContainer.querySelector('tbody');
+  if (!tbody) return;
+  var visibleRows = tbody.querySelectorAll('tr:not([style*="display: none"]):not([style*="display:none"])');
+  var existing = tableOrContainer.parentElement.querySelector('.empty-state');
+  if (visibleRows.length === 0 && !existing) {
+    var msg = document.createElement('div');
+    msg.className = 'empty-state';
+    msg.innerHTML = '<div class="empty-state-icon">⊘</div><div class="empty-state-title">No results found</div><div class="empty-state-msg">Try adjusting your filters or search query.</div>';
+    tableOrContainer.parentElement.appendChild(msg);
+    tableOrContainer.style.display = 'none';
+  } else if (visibleRows.length > 0 && existing) {
+    existing.remove();
+    tableOrContainer.style.display = '';
+  }
+}
+
+// ── Page transition animation ──
+var _baseNav2 = navigateTo;
+navigateTo = function(pageId) {
+  var current = document.querySelector('.page.active');
+  if (current) { current.style.opacity = '0'; current.style.transition = 'opacity 0.15s ease'; }
+  setTimeout(function() {
+    _baseNav2(pageId);
+    var next = document.querySelector('.page.active');
+    if (next) { next.style.opacity = '0'; next.style.transition = 'opacity 0.15s ease';
+      requestAnimationFrame(function() { next.style.opacity = '1'; });
+    }
+  }, 100);
+};
 </script>
 </body>
 </html>
